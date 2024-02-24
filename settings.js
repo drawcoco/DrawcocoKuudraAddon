@@ -15,7 +15,7 @@ import {
 
 @Vigilant("scStats", "scStats", {
     getCategoryComparator: () => (a, b) => {
-        const categories = ["Informations"];
+        const categories = ["Informations", "Graphs", "Worm", "Party ping", "Others"];
         return categories.indexOf(a.name) - categories.indexOf(b.name);
     }
 })
@@ -24,23 +24,35 @@ import {
 class Settings
 {
     constructor() {
-        this.initialize(this)
+        this.initialize(this);
     }
 
 
+     
+    //##############################################################################
+    //                Worm
+    //##############################################################################
 
-//##############################################################################
-//                INFORMATIONS
-//##############################################################################
 
-    @ButtonProperty({
-        name: "Discord",
-        description: "You can join the Discord to see updates, give feature ideas, and report bugs!",
-        category: "Informations",
-        placeholder: "Join Us!"
+    @SwitchProperty({
+        name: "Worm fishing Counter",
+        description: "count the number of worms near you, and send a party message when it cap",
+        category: "Worm",
+        subcategory: "Worm"
     })
-    MyDiscord() {
-        java.awt.Desktop.getDesktop().browse(new java.net.URI("https://discord.gg/8YcmJA7aeM"));
-    }
+    wormCounter = false;
+
+
+    @SwitchProperty({
+        name: "Worm fishing Party Notifier",
+        description: "Notify the party when the cap for worms is reached",
+        category: "Worm",
+        subcategory: "Worm"
+    })
+    wormPartyNotifier = false;
+
+
+
+
 }
 export default new Settings
