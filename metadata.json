@@ -1,0 +1,12 @@
+{
+    "name": "DrawcocoKuudraAddon",
+    "description": "drawcoco Kuudra Addon by drawcoco",
+    "version": "1.0.0",
+    "author": "drawcoco",
+    "entry": "index.js",
+    "requires": [
+        "PogData",
+        "Vigilance",
+        "requestV2"
+    ]
+}
