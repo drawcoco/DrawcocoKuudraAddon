@@ -36,9 +36,14 @@ register("guimouserelease", (x, y, button, gui, event) => {
 });
 
 
+kuudraChestMoney = "";
+
 // render event
 register("renderoverlay", () => {
+    sx = Renderer.screen.getWidth();
+    sy = Renderer.screen.getHeight();
 
+    new Text(kuudraChestMoney, 10, 10).setColor(Renderer.WHITE).draw();
 });
 
 
@@ -207,7 +212,6 @@ register("tick", () => {
                 for (i = 0; i < 54; i++) {
                     // if there's an item
                     if (items[i] != null) {
-
                         // Armor Managment part
 
                         // try every combination of kuudra armor and piece on the item
@@ -215,7 +219,6 @@ register("tick", () => {
                             armorParts.forEach(armorPart => {
                                 // if there's a match, get the lore of the item
                                 if (items[i].getName().includes(armorType + " " + armorPart)) {
-                                    ChatLib.chat("&6" + armorType + " " + armorPart);
                                     spaces = 0;
                                     // sneaky move to not get stats as attributes (like Speed and Health Regen)
                                     attributes = []
@@ -227,20 +230,22 @@ register("tick", () => {
                                         if (spaces == 1) {
                                             armorAttr.forEach(attr => {
                                                 if (lorePart.includes(attr) && !lorePart.includes("Grants")) {
-
                                                     splits = lorePart.split(' ');
                                                     level = romanToInt(splits[splits.length-1]);
-
                                                     attributes.push([attr, level]);
-                                                    ChatLib.chat(attr + " &6" + level);
                                                 }
                                             });
                                         }
                                     });
-                                    ChatLib.chat("price: " + getPrice(armorType, armorPart, attributes[0][0], attributes[0][1], attributes[1][0], attributes[1][1]));
+                                    kuudraChestMoney += armorType + " " + armorPart + " : " + attributes[0][0] + attributes[0][1] + " and " + attributes[1][0] + attributes[1][1] +
+                                                            " => " + getPrice(armorType, armorPart, attributes[0][0], attributes[0][1], attributes[1][0], attributes[1][1]) + "\n";
+                                    setTimeout(function() {
+                                        kuudraChestMoney = "";
+                                    }, "5000");
                                 }
                             });
                         });
+
 
                         // Book Managment part
                     }
