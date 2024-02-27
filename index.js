@@ -359,11 +359,13 @@ register("tick", () => {
                         })
 
                         // Book Management part
-
+                        // if the item is a book
                         if (items[i].getName().includes("Enchanted Book")) {
                             nameLore = items[i].getLore()[1];
+                            // try every combination of book on the item
                             bookEnchants.forEach(enchant => {
                                 if (nameLore.includes(enchant)) {
+                                    // magic to get level and name then display
                                     splits = nameLore.split(' ');
                                     level = romanToInt(splits[splits.length-1]);
                                     kuudraChestMoney += enchant + level + " => " + getEnchantPrice(enchant, level) + "\n";
@@ -372,6 +374,7 @@ register("tick", () => {
                         }
                     }
                 }
+                
                 setTimeout(function() {
                     kuudraChestMoney = "";
                 }, "10000");
