@@ -251,6 +251,55 @@ function getEnchantPrice(enchant, lvl) {
     return 0;
 }
 
+function getShardPrice(shard, lvl) {
+    let bonusLvl = Math.pow(2, 4-lvl);
+
+    if (shard == "Breeze") {
+        return 7000000 / bonusLvl;
+    }
+    if (shard == "Dominance") {
+        return 6500000 / bonusLvl;
+    }
+    if (shard == "Lifeline") {
+        return 9000000 / bonusLvl;
+    }
+    if (shard == "Magic Find") {
+        return 8000000 / bonusLvl;
+    }
+    if (shard == "Mana Pool") {
+        return 10000000 / bonusLvl;
+    }
+    if (shard == "Mana Regeneration") {
+        return 6000000 / bonusLvl;
+    }
+    if (shard == "Speed") {
+        return 3500000 / bonusLvl;
+    }
+    if (shard == "Veteran") {
+        return 7000000 / bonusLvl;
+    }
+    if (shard == "Vitality") {
+        return 7000000 / bonusLvl;
+    }
+    if (shard == "Blazing Fortune") {
+        return 9000000 / bonusLvl;
+    }
+    if (shard == "Fishing Experience") {
+        return 10000000 / bonusLvl;
+    }
+    if (shard == "Double Hook") {
+        return 4000000 / bonusLvl;
+    }
+    if (shard == "Fishing Speed") {
+        return 5000000 / bonusLvl;
+    }
+    if (shard == "Trophy Hunter") {
+        return 3000000 / bonusLvl;
+    }
+    return 500000;
+}
+
+
 EndedKuudra = 1;
 
 armorTypes = ["Aurora", "Crimson", "Terror", "Fervor", "Hollow"];
@@ -259,6 +308,11 @@ armorAttr = ["Arachno Resistance", "Blazing Resistance", "Breeze", "Dominance","
     "Lifeline","Magic Find","Mana Pool","Mana Regeneration","Speed","Undead Resistance","Veteran", "Vitality"];
 bookEnchants = ["Fatal Tempo", "Inferno", "Hardened Mana", "Ferocious Mana", "Strong Mana", "Mana Vampire"];
 equipmentParts = ["Belt", "Necklace", "Cloak", "Bracelet"];
+
+shardAttr = ["Arachno Resistance", "Blazing Resistance", "Breeze", "Dominance","Ender Resistance","Experience","Fortitude","Life Regeneration",
+"Lifeline","Magic Find","Mana Pool","Mana Regeneration","Speed","Undead Resistance","Veteran", "Vitality",
+"Arachno", "Attack Speed", "Blazing", "Combo", "Elite", "Ender", "Ignition", "Life Recovery", "Mana Steal", "Midas Touch", "Undead", "Warrior",
+"Deadeye", "Blazing Fortune","Fishing Experience", "Infection", "Double Hook", "Fisherman", "Fishing Speed", "Hunter", "Trophy Hunter"];
 
 const romanVal = {
     I: 1,
@@ -370,6 +424,22 @@ register("tick", () => {
                                 }
                             });
                         }
+
+                        // Shard Management part
+                        // if the item is an attribute shard
+                        if (items[i].getName().includes("Attribute Shard")) {
+                            nameLore = items[i].getLore()[1];
+                            // try every combination of kuudra armor and piece on the item
+                            shardAttr.forEach(shard => {
+                                if (nameLore.includes(shard)) {
+                                    // magic to get level and name then display
+                                    splits = nameLore.split(' ');
+                                    level = romanToInt(splits[splits.length-1]);
+                                    kuudraChestMoney += shard + level + " => " + getShardPrice(shard, level) + "\n";
+                                }
+                            });
+                        }
+
                     }
                 }
                 setTimeout(function() {
