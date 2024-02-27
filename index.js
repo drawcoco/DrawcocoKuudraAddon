@@ -226,6 +226,31 @@ function uniqueEquipmentAttr(Part, attr1, lvl1, attr2, lvl2) {
 }
 
 
+function getEnchantPrice(enchant, lvl) {
+    let bonusLvl = Math.pow(2, 5-lvl);
+
+    if (enchant == "Fatal Tempo") {
+        return 80000000;
+    }
+    if (enchant == "Inferno") {
+        return 10000000;
+    }
+
+    if (enchant == "Hardened Mana") {
+        return 400000 / bonusLvl;
+    }
+    if (enchant == "Ferocious Mana") {
+        return 1300000 / bonusLvl;
+    }
+    if (enchant == "Strong Mana") {
+        return 1800000 / bonusLvl;
+    }
+    if (enchant == "Mana Vampire") {
+        return 1800000 / bonusLvl;
+    }
+    return 0;
+}
+
 EndedKuudra = 1;
 
 armorTypes = ["Aurora", "Crimson", "Terror", "Fervor", "Hollow"];
@@ -240,19 +265,6 @@ const romanVal = {
     V: 5,
     X: 10
 }
-
-
-
-/*
-t5
-fero 1.5
-vamp 1.7
-hard 0.5
-strong 1.8
-
-
-*/
-
 
 
 
@@ -347,6 +359,17 @@ register("tick", () => {
                         })
 
                         // Book Management part
+
+                        if (items[i].getName().includes("Enchanted Book")) {
+                            nameLore = items[i].getLore()[1];
+                            bookEnchants.forEach(enchant => {
+                                if (nameLore.includes(enchant)) {
+                                    splits = nameLore.split(' ');
+                                    level = romanToInt(splits[splits.length-1]);
+                                    kuudraChestMoney += enchant + level + " => " + getEnchantPrice(enchant, level) + "\n";
+                                }
+                            });
+                        }
                     }
                 }
                 setTimeout(function() {
