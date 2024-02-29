@@ -431,7 +431,7 @@ register("tick", () => {
                         // if the item is an attribute shard
                         if (items[i].getName().includes("Attribute Shard")) {
                             nameLore = items[i].getLore()[1];
-                            // try every combination of kuudra armor and piece on the item
+                            // try every combination of shard on the item
                             shardAttr.forEach(shard => {
                                 if (nameLore.includes(shard)) {
                                     // magic to get level and name then display
@@ -442,6 +442,29 @@ register("tick", () => {
                             });
                         }
 
+                        // Other Items Management part
+                        if (items[i].getName().includes("Enrager")) {
+                            kuudraChestMoney += "ENRAGER => " + 3000000000 + "\n";
+                            ChatLib.chat("what da french seal !!! enrager !!!");
+                        }
+
+                        if (items[i].getName().includes("Wheel of Fate")) {
+                            kuudraChestMoney += "WoF => " + 12000000 + "\n";
+                            ChatLib.chat("Woof ! Woof !!!");
+                        }
+
+                        if (items[i].getName().includes("Tentacle Dye")) {
+                            kuudraChestMoney += "Dye => " + 13000000000 + "\n";
+                            ChatLib.chat("DYE !!!");
+                        }
+
+                        if (items[i].getName().includes("Hollow Wand")) {
+                            kuudraChestMoney += "Hollow Wand => " + 500000 + "\n";
+                        }
+
+                        if (items[i].getName().includes("Aurora Staff")) {
+                            kuudraChestMoney += "Aurora Staff => " + 1000000 + "\n";
+                        }
                     }
                 }
                 
