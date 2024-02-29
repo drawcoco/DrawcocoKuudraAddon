@@ -299,6 +299,50 @@ function getShardPrice(shard, lvl) {
     return 500000;
 }
 
+function attrManify(attr, lvl) {
+    let attrList = {
+        "Arachno Resistance" : "",
+        "Blazing Resistance" : "", 
+        "Breeze" : "breeze", 
+        "Dominance" : "dom",
+        "Ender Resistance" : "",
+        "Experience" : "",
+        "Fortitude" : "",
+        "Life Regeneration" : "",
+        "Lifeline" : "ll",
+        "Magic Find" : "mf",
+        "Mana Pool" : "mp",
+        "Mana Regeneration" : "mr",
+        "Speed" : "speed",
+        "Undead Resistance" : "",
+        "Veteran" : "vet",
+        "Vitality" : "vit",
+        "Arachno" : "",
+        "Attack Speed" : "",
+        "Blazing" : "",
+        "Combo" : "",
+        "Elite" : "",
+        "Ender" : "",
+        "Ignition" : "",
+        "Life Recovery" : "",
+        "Mana Steal" : "",
+        "Midas Touch" : "",
+        "Undead" : "",
+        "Warrior" : "",
+        "Deadeye" : "",
+        "Blazing Fortune" : "bf",
+        "Fishing Experience" : "fe",
+        "Infection" : "",
+        "Double Hook" : "dh",
+        "Fisherman" : "",
+        "Fishing Speed" : "fs",
+        "Hunter" : "",
+        "Trophy Hunter" : "th"};
+    if (attrList[attr].length > 0)
+        return attrList[attr] + " " + lvl;
+    return "";
+}
+
 
 EndedKuudra = 1;
 
@@ -340,6 +384,112 @@ function romanToInt(romanString) {
     return total;
 }
 
+function ArmorManagement(item) {
+    let armorPrice = 0;
+    // try every combination of kuudra armor and piece on the item
+    armorTypes.forEach(armorType => {
+        armorParts.forEach(armorPart => {
+            // if there's a match, get the lore of the item
+            if (item.getName().includes(armorType + " " + armorPart)) {
+                spaces = 0;
+                // sneaky move to not get stats as attributes (like Speed and Health Regen)
+                attributes = [];
+                item.getLore().forEach(lorePart => {
+                    if (lorePart.includes("⚔")) {
+                        spaces += 1;
+                    }
+                    // get the attributes and display them
+                    if (spaces == 1) {
+                        armorAttr.forEach(attr => {
+                            if (lorePart.includes(attr) && !lorePart.includes("Grants")) {
+                                let splits = lorePart.split(' ');
+                                let level = romanToInt(splits[splits.length-1]);
+                                attributes.push([attr, level]);
+                            }
+                        });
+                    }
+                });
+                armorPrice = getArmorPrice(armorType, armorPart, attributes[0][0], attributes[0][1], attributes[1][0], attributes[1][1]);
+                kuudraChestMoney += armorType + " " + armorPart + " " + attrManify(attributes[0][0], attributes[0][1]) + " " + 
+                                    attrManify(attributes[1][0], attributes[1][1]) + " : " + armorPrice + "\n";
+            }
+        });
+    });
+    return parseInt(armorPrice);
+}
+
+function EquipmentManagement(item) {
+    let equipmentPrice = 0;
+    // try every combination of kuudra armor and piece on the item
+    equipmentParts.forEach(equipmentPart => {
+        // if there's a match, get the lore of the item
+        if (item.getName().includes(equipmentPart)) {
+            spaces = 0;
+            // sneaky move to not get stats as attributes (like Speed and Health Regen)
+            attributes = [];
+            item.getLore().forEach(lorePart => {
+
+                if (lorePart.length < 5) {
+                    spaces += 1;
+                }
+                // get the attributes and display them
+                if (spaces == 1) {
+                    armorAttr.forEach(attr => {
+                        if (lorePart.includes(attr) && !lorePart.includes("Grants")) {
+                            let splits = lorePart.split(' ');
+                            let level = romanToInt(splits[splits.length-1]);
+                            attributes.push([attr, level]);
+                        }
+                    });
+                }
+            });
+            equipmentPrice = getEquipmentPrice(equipmentPart, attributes[0][0], attributes[0][1], attributes[1][0], attributes[1][1]);
+            kuudraChestMoney += equipmentPart + " " + attrManify(attributes[0][0], attributes[0][1]) + " " +
+                                attrManify(attributes[1][0], attributes[1][1]) + " : " + equipmentPrice + "\n";
+        }
+    });
+    return parseInt(equipmentPrice);
+}
+
+function BookManagement(item) {
+    let bookPrice = 0;
+    // if the item is a book
+    if (item.getName().includes("Enchanted Book")) {
+        nameLore = item.getLore()[1];
+        // try every combination of book on the item
+        bookEnchants.forEach(enchant => {
+            if (nameLore.includes(enchant)) {
+                // magic to get level and name then display
+                let splits = nameLore.split(' ');
+                let level = romanToInt(splits[splits.length-1]);
+                bookPrice = getEnchantPrice(enchant, level);
+                kuudraChestMoney += enchant + level + " : " + bookPrice + "\n";
+            }
+        });
+    }
+    return parseInt(bookPrice);
+}
+
+function ShardManagement(item) {
+    let shardPrice = 0;
+    // if the item is an attribute shard
+    if (item.getName().includes("Attribute Shard")) {
+        nameLore = item.getLore()[1];
+        // try every combination of shard on the item
+        shardAttr.forEach(shard => {
+            if (nameLore.includes(shard)) {
+                // magic to get level and name then display
+                let splits = nameLore.split(' ');
+                let level = romanToInt(splits[splits.length-1]);
+                shardPrice = getShardPrice(shard, level);
+                totalProfit += parseInt(shardPrice);
+                kuudraChestMoney += "shard " + shard + level + " : " + shardPrice + "\n";
+            }
+        });
+    }
+    return parseInt(shardPrice);
+}
+
 register("tick", () => {
     try {
         // after a kuudra run ended
@@ -356,128 +506,43 @@ register("tick", () => {
                     // if there's an item
                     if (items[i] != null) {
                         // Armor Management part
-                        // try every combination of kuudra armor and piece on the item
-                        armorTypes.forEach(armorType => {
-                            armorParts.forEach(armorPart => {
-                                // if there's a match, get the lore of the item
-                                if (items[i].getName().includes(armorType + " " + armorPart)) {
-                                    spaces = 0;
-                                    // sneaky move to not get stats as attributes (like Speed and Health Regen)
-                                    attributes = [];
-                                    items[i].getLore().forEach(lorePart => {
-                                        if (lorePart.includes("⚔")) {
-                                            spaces += 1;
-                                        }
-                                        // get the attributes and display them
-                                        if (spaces == 1) {
-                                            armorAttr.forEach(attr => {
-                                                if (lorePart.includes(attr) && !lorePart.includes("Grants")) {
-                                                    splits = lorePart.split(' ');
-                                                    level = romanToInt(splits[splits.length-1]);
-                                                    attributes.push([attr, level]);
-                                                }
-                                            });
-                                        }
-                                    });
-                                    armorPrice = getArmorPrice(armorType, armorPart, attributes[0][0], attributes[0][1], attributes[1][0], attributes[1][1]);
-                                    totalProfit += parseInt(armorPrice);
-                                    kuudraChestMoney += armorType + " " + armorPart + " : " + attributes[0][0] + attributes[0][1] + " and " + attributes[1][0] + attributes[1][1] +
-                                                            " => " + armorPrice + "\n";
-                                }
-                            });
-                        });
+                        totalProfit += ArmorManagement(items[i]);
                         
                         // Equipment Management part
-                        // try every combination of kuudra armor and piece on the item
-                        equipmentParts.forEach(equipmentPart => {
-                            // if there's a match, get the lore of the item
-                            if (items[i].getName().includes(equipmentPart)) {
-                                spaces = 0;
-                                // sneaky move to not get stats as attributes (like Speed and Health Regen)
-                                attributes = [];
-                                items[i].getLore().forEach(lorePart => {
-
-                                    if (lorePart.length < 5) {
-                                        spaces += 1;
-                                    }
-                                    // get the attributes and display them
-                                    if (spaces == 1) {
-                                        armorAttr.forEach(attr => {
-                                            if (lorePart.includes(attr) && !lorePart.includes("Grants")) {
-                                                splits = lorePart.split(' ');
-                                                level = romanToInt(splits[splits.length-1]);
-                                                attributes.push([attr, level]);
-                                            }
-                                        });
-                                    }
-                                });
-                                equipmentPrice = getEquipmentPrice(equipmentPart, attributes[0][0], attributes[0][1], attributes[1][0], attributes[1][1]);
-                                totalProfit += parseInt(equipmentPrice);
-                                kuudraChestMoney += equipmentPart + " : " + attributes[0][0] + attributes[0][1] + " and " + attributes[1][0] + attributes[1][1] +
-                                                        " => " + equipmentPrice + "\n";
-                            }
-                        })
+                        totalProfit += EquipmentManagement(items[i]);
 
                         // Book Management part
-                        // if the item is a book
-                        if (items[i].getName().includes("Enchanted Book")) {
-                            nameLore = items[i].getLore()[1];
-                            // try every combination of book on the item
-                            bookEnchants.forEach(enchant => {
-                                if (nameLore.includes(enchant)) {
-                                    // magic to get level and name then display
-                                    splits = nameLore.split(' ');
-                                    level = romanToInt(splits[splits.length-1]);
-                                    bookPrice = getEnchantPrice(enchant, level);
-                                    totalProfit += parseInt(bookPrice);
-                                    kuudraChestMoney += enchant + level + " => " + bookPrice + "\n";
-                                }
-                            });
-                        }
+                        totalProfit += BookManagement(items[i]);
 
                         // Shard Management part
-                        // if the item is an attribute shard
-                        if (items[i].getName().includes("Attribute Shard")) {
-                            nameLore = items[i].getLore()[1];
-                            // try every combination of shard on the item
-                            shardAttr.forEach(shard => {
-                                if (nameLore.includes(shard)) {
-                                    // magic to get level and name then display
-                                    splits = nameLore.split(' ');
-                                    level = romanToInt(splits[splits.length-1]);
-                                    shardPrice = getShardPrice(shard, level);
-                                    totalProfit += parseInt(shardPrice);
-                                    kuudraChestMoney += shard + level + " => " + shardPrice + "\n";
-                                }
-                            });
-                        }
+                        totalProfit += ShardManagement(items[i]);
 
                         // Other Items Management part
                         if (items[i].getName().includes("Enrager")) {
-                            kuudraChestMoney += "ENRAGER => " + 3000000000 + "\n";
+                            kuudraChestMoney += "ENRAGER : " + 3000000000 + "\n";
                             totalProfit += 3000000000;
                             ChatLib.chat("what da french seal !!! enrager !!!");
                         }
 
                         if (items[i].getName().includes("Wheel of Fate")) {
-                            kuudraChestMoney += "WoF => " + 12000000 + "\n";
+                            kuudraChestMoney += "WoF : " + 12000000 + "\n";
                             totalProfit += 12000000;
                             ChatLib.chat("Woof ! Woof !!!");
                         }
 
                         if (items[i].getName().includes("Tentacle Dye")) {
-                            kuudraChestMoney += "Dye => " + 13000000000 + "\n";
+                            kuudraChestMoney += "Dye : " + 13000000000 + "\n";
                             totalProfit += 13000000000;
                             ChatLib.chat("DYE !!!");
                         }
 
                         if (items[i].getName().includes("Hollow Wand")) {
-                            kuudraChestMoney += "Hollow Wand => " + 500000 + "\n";
+                            kuudraChestMoney += "Hollow Wand : " + 500000 + "\n";
                             totalProfit += 500000;
                         }
 
                         if (items[i].getName().includes("Aurora Staff")) {
-                            kuudraChestMoney += "Aurora Staff => " + 1000000 + "\n";
+                            kuudraChestMoney += "Aurora Staff : " + 1000000 + "\n";
                             totalProfit += 1000000;
                         }
                     }
