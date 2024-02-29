@@ -349,10 +349,12 @@ register("tick", () => {
             if (openedChest.getName() == "Paid Chest" || openedChest.getName() == "Large Chest") {
                 items = openedChest.getItems();
                 // cycle throuth the slots
+
+                totalProfit = 0;
+
                 for (i = 0; i < 54; i++) {
                     // if there's an item
                     if (items[i] != null) {
-
                         // Armor Management part
                         // try every combination of kuudra armor and piece on the item
                         armorTypes.forEach(armorType => {
@@ -377,8 +379,10 @@ register("tick", () => {
                                             });
                                         }
                                     });
+                                    armorPrice = getArmorPrice(armorType, armorPart, attributes[0][0], attributes[0][1], attributes[1][0], attributes[1][1]);
+                                    totalProfit += armorPrice;
                                     kuudraChestMoney += armorType + " " + armorPart + " : " + attributes[0][0] + attributes[0][1] + " and " + attributes[1][0] + attributes[1][1] +
-                                                            " => " + getArmorPrice(armorType, armorPart, attributes[0][0], attributes[0][1], attributes[1][0], attributes[1][1]) + "\n";
+                                                            " => " + armorPrice + "\n";
                                 }
                             });
                         });
@@ -407,8 +411,10 @@ register("tick", () => {
                                         });
                                     }
                                 });
+                                equipmentPrice = getEquipmentPrice(equipmentPart, attributes[0][0], attributes[0][1], attributes[1][0], attributes[1][1]);
+                                totalProfit += equipmentPrice;
                                 kuudraChestMoney += equipmentPart + " : " + attributes[0][0] + attributes[0][1] + " and " + attributes[1][0] + attributes[1][1] +
-                                                        " => " + getEquipmentPrice(equipmentPart, attributes[0][0], attributes[0][1], attributes[1][0], attributes[1][1]) + "\n";
+                                                        " => " + equipmentPrice + "\n";
                             }
                         })
 
@@ -422,7 +428,9 @@ register("tick", () => {
                                     // magic to get level and name then display
                                     splits = nameLore.split(' ');
                                     level = romanToInt(splits[splits.length-1]);
-                                    kuudraChestMoney += enchant + level + " => " + getEnchantPrice(enchant, level) + "\n";
+                                    bookPrice = getEnchantPrice(enchant, level);
+                                    totalProfit += bookPrice;
+                                    kuudraChestMoney += enchant + level + " => " + bookPrice + "\n";
                                 }
                             });
                         }
@@ -437,7 +445,9 @@ register("tick", () => {
                                     // magic to get level and name then display
                                     splits = nameLore.split(' ');
                                     level = romanToInt(splits[splits.length-1]);
-                                    kuudraChestMoney += shard + level + " => " + getShardPrice(shard, level) + "\n";
+                                    shardPrice = getShardPrice(shard, level);
+                                    totalProfit += shardPrice;
+                                    kuudraChestMoney += shard + level + " => " + shardPrice + "\n";
                                 }
                             });
                         }
@@ -445,28 +455,35 @@ register("tick", () => {
                         // Other Items Management part
                         if (items[i].getName().includes("Enrager")) {
                             kuudraChestMoney += "ENRAGER => " + 3000000000 + "\n";
+                            totalProfit += 3000000000;
                             ChatLib.chat("what da french seal !!! enrager !!!");
                         }
 
                         if (items[i].getName().includes("Wheel of Fate")) {
                             kuudraChestMoney += "WoF => " + 12000000 + "\n";
+                            totalProfit += 12000000;
                             ChatLib.chat("Woof ! Woof !!!");
                         }
 
                         if (items[i].getName().includes("Tentacle Dye")) {
                             kuudraChestMoney += "Dye => " + 13000000000 + "\n";
+                            totalProfit += 13000000000;
                             ChatLib.chat("DYE !!!");
                         }
 
                         if (items[i].getName().includes("Hollow Wand")) {
                             kuudraChestMoney += "Hollow Wand => " + 500000 + "\n";
+                            totalProfit += 500000;
                         }
 
                         if (items[i].getName().includes("Aurora Staff")) {
                             kuudraChestMoney += "Aurora Staff => " + 1000000 + "\n";
+                            totalProfit += 1000000;
                         }
                     }
                 }
+
+                kuudraChestMoney += "\n" + "total : " + totalProfit;
                 
                 setTimeout(function() {
                     kuudraChestMoney = "";
