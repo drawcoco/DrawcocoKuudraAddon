@@ -380,7 +380,7 @@ register("tick", () => {
                                         }
                                     });
                                     armorPrice = getArmorPrice(armorType, armorPart, attributes[0][0], attributes[0][1], attributes[1][0], attributes[1][1]);
-                                    totalProfit += armorPrice;
+                                    totalProfit += parseInt(armorPrice);
                                     kuudraChestMoney += armorType + " " + armorPart + " : " + attributes[0][0] + attributes[0][1] + " and " + attributes[1][0] + attributes[1][1] +
                                                             " => " + armorPrice + "\n";
                                 }
@@ -412,7 +412,7 @@ register("tick", () => {
                                     }
                                 });
                                 equipmentPrice = getEquipmentPrice(equipmentPart, attributes[0][0], attributes[0][1], attributes[1][0], attributes[1][1]);
-                                totalProfit += equipmentPrice;
+                                totalProfit += parseInt(equipmentPrice);
                                 kuudraChestMoney += equipmentPart + " : " + attributes[0][0] + attributes[0][1] + " and " + attributes[1][0] + attributes[1][1] +
                                                         " => " + equipmentPrice + "\n";
                             }
@@ -429,7 +429,7 @@ register("tick", () => {
                                     splits = nameLore.split(' ');
                                     level = romanToInt(splits[splits.length-1]);
                                     bookPrice = getEnchantPrice(enchant, level);
-                                    totalProfit += bookPrice;
+                                    totalProfit += parseInt(bookPrice);
                                     kuudraChestMoney += enchant + level + " => " + bookPrice + "\n";
                                 }
                             });
@@ -446,7 +446,7 @@ register("tick", () => {
                                     splits = nameLore.split(' ');
                                     level = romanToInt(splits[splits.length-1]);
                                     shardPrice = getShardPrice(shard, level);
-                                    totalProfit += shardPrice;
+                                    totalProfit += parseInt(shardPrice);
                                     kuudraChestMoney += shard + level + " => " + shardPrice + "\n";
                                 }
                             });
