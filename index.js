@@ -195,31 +195,31 @@ function uniqueEquipmentAttr(Part, attr1, lvl1, attr2, lvl2) {
 
     let prices = [1000000];
     if (attr1 == "Mana Pool" || attr2 == "Mana Pool") {
-        prices.push((Part == "Necklace" ? 15000000 : Part == "Cloak" ? 18000000 : Part == "Belt" ? 12000000 : 11000000) / (attr1 == "Mana Pool" ? bonusLvl1 : bonusLvl2));
+        prices.push((Part == "Necklace" ? 15 : Part == "Cloak" ? 18 : Part == "Belt" ? 12 : 11) / (attr1 == "Mana Pool" ? bonusLvl1 : bonusLvl2));
     }
     if (attr1 == "Dominance" || attr2 == "Dominance") {
-        prices.push((Part == "Necklace" ? 14000000 : Part == "Cloak" ? 6000000 : Part == "Belt" ? 6000000 : 6000000) / (attr1 == "Dominance" ? bonusLvl1 : bonusLvl2));
+        prices.push((Part == "Necklace" ? 14 : Part == "Cloak" ? 6 : Part == "Belt" ? 6 : 6) / (attr1 == "Dominance" ? bonusLvl1 : bonusLvl2));
     }
     if (attr1 == "Lifeline" || attr2 == "Lifeline") {
-        prices.push((Part == "Necklace" ? 6000000 : Part == "Cloak" ? 20000000 : Part == "Belt" ? 24000000 : 26000000) / (attr1 == "Lifeline" ? bonusLvl1 : bonusLvl2));
+        prices.push((Part == "Necklace" ? 6 : Part == "Cloak" ? 20 : Part == "Belt" ? 24 : 26) / (attr1 == "Lifeline" ? bonusLvl1 : bonusLvl2));
     }
     if (attr1 == "Veteran" || attr2 == "Veteran") {
-        prices.push((Part == "Necklace" ? 9000000 : Part == "Cloak" ? 9000000 : Part == "Belt" ? 9000000 : 6000000) / (attr1 == "Veteran" ? bonusLvl1 : bonusLvl2));
+        prices.push((Part == "Necklace" ? 9 : Part == "Cloak" ? 9 : Part == "Belt" ? 9 : 6) / (attr1 == "Veteran" ? bonusLvl1 : bonusLvl2));
     }
     if (attr1 == "Vitality" || attr2 == "Vitality") {
-        prices.push((Part == "Necklace" ? 4000000 : Part == "Cloak" ? 4000000 : Part == "Belt" ? 4000000 : 4000000) / (attr1 == "Vitality" ? bonusLvl1 : bonusLvl2));
+        prices.push((Part == "Necklace" ? 4 : Part == "Cloak" ? 4 : Part == "Belt" ? 4 : 4) / (attr1 == "Vitality" ? bonusLvl1 : bonusLvl2));
     }
     if (attr1 == "Magic Find" || attr2 == "Magic Find") {
-        prices.push((Part == "Necklace" ? 4000000 : Part == "Cloak" ? 20000000 : Part == "Belt" ? 14000000 : 14000000) / (attr1 == "Magic Find" ? bonusLvl1 : bonusLvl2));
+        prices.push((Part == "Necklace" ? 4 : Part == "Cloak" ? 20 : Part == "Belt" ? 14 : 14) / (attr1 == "Magic Find" ? bonusLvl1 : bonusLvl2));
     }
     if (attr1 == "Mana Regeneration" || attr2 == "Mana Regeneration") {
-        prices.push((Part == "Necklace" ? 7000000 : Part == "Cloak" ? 5000000 : Part == "Belt" ? 2000000 : 4000000) / (attr1 == "Mana Regeneration" ? bonusLvl1 : bonusLvl2));
+        prices.push((Part == "Necklace" ? 7 : Part == "Cloak" ? 5 : Part == "Belt" ? 2 : 4) / (attr1 == "Mana Regeneration" ? bonusLvl1 : bonusLvl2));
     }
     if (attr1 == "Breeze" || attr2 == "Breeze") {
-        prices.push((Part == "Necklace" ? 10000000 : Part == "Cloak" ? 10000000 : Part == "Belt" ? 5000000 : 2000000) / (attr1 == "Breeze" ? bonusLvl1 : bonusLvl2));
+        prices.push((Part == "Necklace" ? 10 : Part == "Cloak" ? 10 : Part == "Belt" ? 5 : 2) / (attr1 == "Breeze" ? bonusLvl1 : bonusLvl2));
     }
     if (attr1 == "Speed" || attr2 == "Speed") {
-        prices.push((Part == "Necklace" ? 6000000 : Part == "Cloak" ? 6000000 : Part == "Belt" ? 7000000 : 8000000) / (attr1 == "Speed" ? bonusLvl1 : bonusLvl2));
+        prices.push((Part == "Necklace" ? 6 : Part == "Cloak" ? 6 : Part == "Belt" ? 7 : 8) / (attr1 == "Speed" ? bonusLvl1 : bonusLvl2));
     }
 
     return Math.max(...prices);
