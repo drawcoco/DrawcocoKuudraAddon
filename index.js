@@ -572,3 +572,7 @@ register("command", () => {
 register("chat", () => {
     EndedKuudra = true;
 }).setChatCriteria("                        Percentage Complete: 100%");
+
+register("chat", () => {
+    ChatLib.say("/pc [DKA] Fresh");
+}).setChatCriteria("Your Fresh Tools Perk bonus doubles your building speed for the next 10 seconds!");
