@@ -343,6 +343,19 @@ function attrManify(attr, lvl) {
     return "";
 }
 
+function priceManify(price) {
+    // safety measure
+    price = parseInt(price);
+
+    if (price < 1000000) {
+        return price / 1000 + "k";
+    }else if (price < 1000000000) {
+        return Math.round(price / 100000) / 10 + "m";
+    }
+    else {
+        return Math.round(price / 100000000) / 10 + "b";
+    }
+}
 
 EndedKuudra = 1;
 
@@ -411,7 +424,7 @@ function ArmorManagement(item) {
                 });
                 armorPrice = getArmorPrice(armorType, armorPart, attributes[0][0], attributes[0][1], attributes[1][0], attributes[1][1]);
                 kuudraChestMoney += armorType + " " + armorPart + " " + attrManify(attributes[0][0], attributes[0][1]) + " " + 
-                                    attrManify(attributes[1][0], attributes[1][1]) + " : " + armorPrice + "\n";
+                                    attrManify(attributes[1][0], attributes[1][1]) + " : " + priceManify(armorPrice) + "\n";
             }
         });
     });
@@ -445,7 +458,7 @@ function EquipmentManagement(item) {
             });
             equipmentPrice = getEquipmentPrice(equipmentPart, attributes[0][0], attributes[0][1], attributes[1][0], attributes[1][1]);
             kuudraChestMoney += equipmentPart + " " + attrManify(attributes[0][0], attributes[0][1]) + " " +
-                                attrManify(attributes[1][0], attributes[1][1]) + " : " + equipmentPrice + "\n";
+                                attrManify(attributes[1][0], attributes[1][1]) + " : " + priceManify(equipmentPrice) + "\n";
         }
     });
     return parseInt(equipmentPrice);
@@ -463,7 +476,7 @@ function BookManagement(item) {
                 let splits = nameLore.split(' ');
                 let level = romanToInt(splits[splits.length-1]);
                 bookPrice = getEnchantPrice(enchant, level);
-                kuudraChestMoney += enchant + level + " : " + bookPrice + "\n";
+                kuudraChestMoney += enchant + level + " : " + priceManify(bookPrice) + "\n";
             }
         });
     }
@@ -483,7 +496,7 @@ function ShardManagement(item) {
                 let level = romanToInt(splits[splits.length-1]);
                 shardPrice = getShardPrice(shard, level);
                 totalProfit += parseInt(shardPrice);
-                kuudraChestMoney += "shard " + shard + level + " : " + shardPrice + "\n";
+                kuudraChestMoney += "shard " + attrManify(shard, level) + " : " + priceManify(shardPrice) + "\n";
             }
         });
     }
@@ -519,36 +532,36 @@ register("tick", () => {
 
                         // Other Items Management part
                         if (items[i].getName().includes("Enrager")) {
-                            kuudraChestMoney += "ENRAGER : " + 3000000000 + "\n";
+                            kuudraChestMoney += "ENRAGER : 3b\n";
                             totalProfit += 3000000000;
                             ChatLib.chat("what da french seal !!! enrager !!!");
                         }
 
                         if (items[i].getName().includes("Wheel of Fate")) {
-                            kuudraChestMoney += "WoF : " + 12000000 + "\n";
+                            kuudraChestMoney += "WoF : 12m\n";
                             totalProfit += 12000000;
                             ChatLib.chat("Woof ! Woof !!!");
                         }
 
                         if (items[i].getName().includes("Tentacle Dye")) {
-                            kuudraChestMoney += "Dye : " + 13000000000 + "\n";
+                            kuudraChestMoney += "Dye : 13b\n";
                             totalProfit += 13000000000;
                             ChatLib.chat("DYE !!!");
                         }
 
                         if (items[i].getName().includes("Hollow Wand")) {
-                            kuudraChestMoney += "Hollow Wand : " + 500000 + "\n";
+                            kuudraChestMoney += "Hollow Wand : 500k\n";
                             totalProfit += 500000;
                         }
 
                         if (items[i].getName().includes("Aurora Staff")) {
-                            kuudraChestMoney += "Aurora Staff : " + 1000000 + "\n";
+                            kuudraChestMoney += "Aurora Staff : 1m\n";
                             totalProfit += 1000000;
                         }
                     }
                 }
 
-                kuudraChestMoney += "\n" + "total : " + totalProfit;
+                kuudraChestMoney += "\n" + "total : " + priceManify(totalProfit);
                 
                 setTimeout(function() {
                     kuudraChestMoney = "";
