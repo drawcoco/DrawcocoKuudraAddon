@@ -221,7 +221,6 @@ function uniqueEquipmentAttr(Part, attr1, lvl1, attr2, lvl2) {
     if (attr1 == "Speed" || attr2 == "Speed") {
         prices.push((Part == "Necklace" ? 6 : Part == "Cloak" ? 6 : Part == "Belt" ? 7 : 8) / (attr1 == "Speed" ? bonusLvl1 : bonusLvl2));
     }
-
     return Math.max(...prices);
 }
 
