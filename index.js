@@ -57,24 +57,25 @@ register("renderoverlay", () => {
 
 
 function getArmorPrice(Type, Part, attr1, lvl1, attr2, lvl2) {
+    let isHelm = Part == "Helmet";
     if (Type == "Aurora") {
-      return Math.max(isAuroraGodRoll(attr1, attr2) / (Part == "Helmet" ? 10 : 1), uniqueArmorAttr(attr1, lvl1, attr2, lvl2)).toString();
+      return Math.max(isAuroraGodRoll(attr1, attr2) / (Part == "Helmet" ? 10 : 1), uniqueArmorAttr(attr1, lvl1, attr2, lvl2, isHelm)).toString();
     }
     else if (Type == "Crimson") {
-      return Math.max(isCrimsonGodRoll(attr1, attr2) / (Part == "Helmet" ? 10 : 1), uniqueArmorAttr(attr1, lvl1, attr2, lvl2)).toString();
+      return Math.max(isCrimsonGodRoll(attr1, attr2) / (Part == "Helmet" ? 10 : 1), uniqueArmorAttr(attr1, lvl1, attr2, lvl2, isHelm)).toString();
     }
     else if (Type == "Terror") {
-      return Math.max(isTerrorGodRoll(attr1, attr2) / (Part == "Helmet" ? 10 : 1), uniqueArmorAttr(attr1, lvl1, attr2, lvl2)).toString();
+      return Math.max(isTerrorGodRoll(attr1, attr2) / (Part == "Helmet" ? 10 : 1), uniqueArmorAttr(attr1, lvl1, attr2, lvl2, isHelm)).toString();
     }
     else if (Type == "Hollow") {
-      return Math.max(isHollowGodRoll(attr1, attr2) / (Part == "Helmet" ? 10 : 1), uniqueArmorAttr(attr1, lvl1, attr2, lvl2)).toString();
+      return Math.max(isHollowGodRoll(attr1, attr2) / (Part == "Helmet" ? 10 : 1), uniqueArmorAttr(attr1, lvl1, attr2, lvl2, isHelm)).toString();
     }
     else { // fervor
-      return uniqueArmorAttr(attr1, lvl1, attr2, lvl2).toString();
+      return uniqueArmorAttr(attr1, lvl1, attr2, lvl2, isHelm).toString();
     }
 }
   
-function uniqueArmorAttr(attr1, lvl1, attr2, lvl2) {
+function uniqueArmorAttr(attr1, lvl1, attr2, lvl2, isHelm) {
     let bonusLvl1 = lvl1 == 6 ? 0.5 : Math.pow(2, 5-lvl1);
     let bonusLvl2 = lvl2 == 6 ? 0.5 : Math.pow(2, 5-lvl2);
 
@@ -106,7 +107,7 @@ function uniqueArmorAttr(attr1, lvl1, attr2, lvl2) {
     if (attr1 == "Magic Find" || attr2 == "Magic Find") {
         prices.push(7000000 / (attr1 == "Magic Find" ? bonusLvl1 : bonusLvl2));
     }
-    return Math.max(...prices);
+    return Math.max(...prices)/ (isHelm ? 4 : 1);
 }
 
 function isAuroraGodRoll(attr1, attr2) {
