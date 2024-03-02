@@ -7,6 +7,6 @@
     "requires": [
         "PogData",
         "Vigilance",
-        "requestV2"
+        "axios"
     ]
 }
