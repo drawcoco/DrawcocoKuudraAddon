@@ -619,13 +619,26 @@ stuff = {
   
   ArmorTiers = [[5, "Infernal"],[4, "Fiery"], [3, "Burning"], [2, "Hot"], [1, ""]];
 
+
+
+
+
 register("command", (username) => {
-    ChatLib.chat("requesting SkyCrypt =>");
+    getStuff(username);
+}).setName("getStuff");
+
+
+register("chat", (username, event) => {
+    getStuff(username);
+}).setCriteria("Party > ${username} joined.");
+
+
+
+function getStuff(username) {
+    ChatLib.chat("Requesting SkyCrypt ...");
     request({url: `https://sky.shiiyu.moe/api/v2/profile/${username}`, json: true}).then(response => {
-        ChatLib.chat("Clearing data =>");
-        return response.json();
-    }).then( data => {
-        playerProfile = Object.entries(data.profiles).find(profile => profile[1].current == true)[1];
+        ChatLib.chat("...");
+        playerProfile = Object.entries(response.data.profiles).find(profile => profile[1].current == true)[1];
     
         stuff.username = username;
         stuff.skyblock_level = playerProfile.data.skyblock_level.level;
@@ -640,7 +653,7 @@ register("command", (username) => {
                 stuff.Ragaxe.chimera = item.tag.ExtraAttributes.enchantments.ultimate_chimera;
             }
             }
-            if (item.display_name.includes("Hyperion")) {
+            if (item.display_name.includes("Hyperion") || item.display_name.includes("Valkyrie") || item.display_name.includes("Scylla") || item.display_name.includes("Astraea")) {
             stuff.Hyperion = "true";
             }
             if (item.display_name.includes("Terminator")) {
@@ -781,13 +794,61 @@ register("command", (username) => {
             }
         }
         })
-    
-        ChatLib.chat(stuff.Terror.tier);
-        ChatLib.chat(stuff.Terror.ll);
-        ChatLib.chat(stuff.Terror.dom);
-        ChatLib.chat(stuff.Terror.mp);
-        ChatLib.chat(stuff.Aurora.tier);
+        let terrorDisp = ``
+        if (stuff.Terror.tier != "false") {
+            terrorDisp = `Terror ${stuff.Terror.tier}    `;
+            if (stuff.Terror.tier != "false") {
+                terrorDisp += (stuff.Terror.ll > stuff.Terror.dom ? `ll ${stuff.Terror.ll} ` : `dom ${stuff.Terror.dom} `);
+                terrorDisp += `mp ${stuff.Terror.mp}`;
+            }
+        } else {
+            terrorDisp = `$4No Terror`;
+        }
+
+        let termDisp = ``;
+        if (stuff.Terminator.Ult.length > 0) {
+            termDisp = `Terminator : `;
+            stuff.Terminator.Ult.forEach(ult => {
+                termDisp += `${ult} `;
+            });
+            if (stuff.Terminator.pow_seven == "true" || stuff.Terminator.cub_six == "true") {
+                termDisp += `&6[`;
+                if (stuff.Terminator.pow_seven == "true") {
+                    termDisp += `p7`;
+                    if (stuff.Terminator.cub_six == "true") {
+                        termDisp += `, c6`;
+                    }
+                } else {
+                    termDisp += `c6`;
+                }
+                termDisp += `]&r`;
+            }
+        } else {
+            termDisp = `$4no Terminator&r`;
+        }
+
+        let ragaxeDisp = ``;
+        if (stuff.Ragaxe.present == "true") {
+            ragaxeDisp = `Ragaxe `;
+            if (stuff.Ragaxe.chimera > 0) {
+                ragaxeDisp += `&6chimera ${stuff.Ragaxe.chimera}&r`;
+            }
+        } else {
+            ragaxeDisp = `&4No Ragaxe&r`;
+        }
+
+        ChatLib.chat(`&2&l~~~ Info for player ${stuff.username} ~~~&r`);
+        ChatLib.chat(parseInt(stuff.skyblock_level) > 300 ? `&6Sb Lvl ${stuff.skyblock_level}&r` : parseInt(stuff.skyblock_level) < 200 ? `&4Sb Lvl ${stuff.skyblock_level}&r` : `Sb Lvl ${stuff.skyblock_level}`);
+        ChatLib.chat(parseInt(stuff.MP) > 1200 ? `&6Magical Power ${stuff.MP}&r` : parseInt(stuff.MP) < 800 ? `&4Magical Power ${stuff.MP}&r` : `Magical Power ${stuff.MP}`);
+        ChatLib.chat(stuff.Hyperion != "false" ? `Hyperion OK` : `&4Hyperion KO&r`);
+        ChatLib.chat(terrorDisp);
+        ChatLib.chat(`Aurora ${stuff.Aurora.tier}`);
+        ChatLib.chat(termDisp);
+        ChatLib.chat(stuff.oneB_bank == "true" ? `1b bank OK` : `&41b bank KO&r`);
+        ChatLib.chat(ragaxeDisp);
+        ChatLib.chat(stuff.Reaper == "true" ? `Reaper armor OK` : `&4Reaper armor KO&r`);
+
     }).chat(error => {
         ChatLib.chat(error);
     })
-}).setName("getStuff");
+}
