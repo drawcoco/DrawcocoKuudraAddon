@@ -44,6 +44,8 @@ register("renderoverlay", () => {
     sy = Renderer.screen.getHeight();
 
     new Text(kuudraChestMoney, 10, 10).setColor(Renderer.WHITE).draw();
+
+    new Text(`Mana Drain: ${myDrainage}`, 0, 100).setColor(Renderer.WHITE).draw();
 });
 
 
@@ -580,6 +582,49 @@ register("command", () => {
     EndedKuudra = true;
 }).setName("endKuudra");
 
+
+// on mana drain using an end stone sword
+register("chat", (mana) => {
+    // get self coords
+    myX = Player.getLastX();
+    myY = Player.getLastY();
+    myZ = Player.getLastZ();
+    // construct the list of players around you
+    names = [];
+    World.getAllPlayers().forEach(p => {
+        if (Math.pow(Math.pow(p.getLastX()-myX, 2) + Math.pow(p.getLastY()-myY, 2) + Math.pow(p.getLastZ()-myZ, 2), 0.5) < 4) {
+            if (p.getName() != Player.getName()) {
+                names.push(p.getName());
+            }
+        }
+    })
+    // generate the message and send it
+    message = `[DKA] Drained ${mana} mana on [`;
+    for(let n = 0; n < names.length; n++) {
+        message += names[n];
+        if (n < names.length-1) {
+            message += `, `;
+        }
+    }
+    message += `]`;
+    ChatLib.say(`/pc ` + message);
+}).setChatCriteria("Used Extreme Focus! (${mana} Mana)");
+
+
+myDrainage = 0;
+
+// on mana drain message in party, 
+register("chat", (p, mana, names, event) => {
+    // get hte list of players affected
+    usernames = names.split(", ");
+    // if you are part of the list, adds the mana to your total
+    if (usernames.includes(Player.getName())) {
+        myDrainage += parseInt(mana);
+        setTimeout(function () {
+            myDrainage -= parseInt(mana);
+        }, 10000);
+    }
+}).setChatCriteria("Party > ${p}: [DKA] Drained ${mana} mana on [${names}]");
 
 // kuudra end run detection
 register("chat", () => {
