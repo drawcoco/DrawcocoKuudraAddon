@@ -86,18 +86,24 @@ register("renderoverlay", () => {
     sy = Renderer.screen.getHeight();
 
     if (settings.chestCalc) {
-        new Text(kuudraChestMoney, data.display.xProfit, data.display.yProfit).setColor(Renderer.WHITE).draw();
+        xProfit = data.display.xProfit;
+        yProfit = data.display.yProfit;
+
+        new Text(kuudraChestMoney, xProfit, yProfit).setColor(Renderer.WHITE).draw();
         if (movedisplay.isOpen()) {
             let exemple = "Exemple Chestplate: 5m\nExemple Book: 1.2m\n\nTotal: 6.2m";
-            new Text(exemple, data.display.xProfit, data.display.yProfit).setColor(Renderer.WHITE).draw();
-            emptyRectangle(data.display.xProfit-5, data.display.yProfit-5, 160, 90);
+            new Text(exemple, xProfit, yProfit).setColor(Renderer.WHITE).draw();
+            emptyRectangle(xProfit-5, yProfit-5, 160, 90);
         }
     }
 
     if (settings.manaDrainDisplay) {
-        new Text(`Mana Drain: ${myDrainage}`, data.display.xMana, data.display.yMana).setColor(Renderer.WHITE).draw();
+        xMana = data.display.xMana;
+        yMana = data.display.yMana;
+
+        new Text(`Mana Drain: ${myDrainage}`, xMana, yMana).setColor(Renderer.WHITE).draw();
         if (movedisplay.isOpen()) {
-            emptyRectangle(data.display.xMana-5, data.display.yMana-5, 80, 20);
+            emptyRectangle(xMana-5, yMana-5, 80, 20);
         }
     }
 });
@@ -300,16 +306,16 @@ function getEnchantPrice(enchant, lvl) {
     }
 
     if (enchant == "Hardened Mana") {
-        return 400000 / bonusLvl;
+        return (400000 / bonusLvl);
     }
     if (enchant == "Ferocious Mana") {
-        return 1300000 / bonusLvl;
+        return (1300000 / bonusLvl);
     }
     if (enchant == "Strong Mana") {
-        return 1800000 / bonusLvl;
+        return (1800000 / bonusLvl);
     }
     if (enchant == "Mana Vampire") {
-        return 1800000 / bonusLvl;
+        return (1800000 / bonusLvl);
     }
     return 0;
 }
@@ -318,46 +324,46 @@ function getShardPrice(shard, lvl) {
     let bonusLvl = Math.pow(2, 4-lvl);
 
     if (shard == "Breeze") {
-        return 7000000 / bonusLvl;
+        return (7000000 / bonusLvl);
     }
     if (shard == "Dominance") {
-        return 6500000 / bonusLvl;
+        return (6500000 / bonusLvl);
     }
     if (shard == "Lifeline") {
-        return 9000000 / bonusLvl;
+        return (9000000 / bonusLvl);
     }
     if (shard == "Magic Find") {
-        return 8000000 / bonusLvl;
+        return (8000000 / bonusLvl);
     }
     if (shard == "Mana Pool") {
-        return 10000000 / bonusLvl;
+        return (10000000 / bonusLvl);
     }
     if (shard == "Mana Regeneration") {
-        return 6000000 / bonusLvl;
+        return (6000000 / bonusLvl);
     }
     if (shard == "Speed") {
-        return 3500000 / bonusLvl;
+        return (3500000 / bonusLvl);
     }
     if (shard == "Veteran") {
-        return 7000000 / bonusLvl;
+        return (7000000 / bonusLvl);
     }
     if (shard == "Vitality") {
-        return 7000000 / bonusLvl;
+        return (7000000 / bonusLvl);
     }
     if (shard == "Blazing Fortune") {
-        return 9000000 / bonusLvl;
+        return (9000000 / bonusLvl);
     }
     if (shard == "Fishing Experience") {
-        return 10000000 / bonusLvl;
+        return (10000000 / bonusLvl);
     }
     if (shard == "Double Hook") {
-        return 4000000 / bonusLvl;
+        return (4000000 / bonusLvl);
     }
     if (shard == "Fishing Speed") {
-        return 5000000 / bonusLvl;
+        return (5000000 / bonusLvl);
     }
     if (shard == "Trophy Hunter") {
-        return 3000000 / bonusLvl;
+        return (3000000 / bonusLvl);
     }
     return 500000;
 }
@@ -407,6 +413,9 @@ function attrManify(attr, lvl) {
 }
 
 function priceManify(price) {
+    // security purpose
+    price = parseFloat(price);
+
     if (price < 1000000) {
         return price / 1000 + "k";
     }else if (price < 1000000000) {
@@ -417,16 +426,16 @@ function priceManify(price) {
     }
 }
 
-EndedKuudra = 1;
+var EndedKuudraRegister = [];
 
-armorTypes = ["Aurora", "Crimson", "Terror", "Fervor", "Hollow"];
-armorParts = ["Helmet", "Chestplate", "Leggings", "Boots"];
-armorAttr = ["Arachno Resistance", "Blazing Resistance", "Breeze", "Dominance","Ender Resistance","Experience","Fortitude","Life Regeneration",
+var armorTypes = ["Aurora", "Crimson", "Terror", "Fervor", "Hollow"];
+var armorParts = ["Helmet", "Chestplate", "Leggings", "Boots"];
+var armorAttr = ["Arachno Resistance", "Blazing Resistance", "Breeze", "Dominance","Ender Resistance","Experience","Fortitude","Life Regeneration",
     "Lifeline","Magic Find","Mana Pool","Mana Regeneration","Speed","Undead Resistance","Veteran", "Vitality"];
-bookEnchants = ["Fatal Tempo", "Inferno", "Hardened Mana", "Ferocious Mana", "Strong Mana", "Mana Vampire"];
-equipmentParts = ["Belt", "Necklace", "Cloak", "Bracelet"];
+var bookEnchants = ["Fatal Tempo", "Inferno", "Hardened Mana", "Ferocious Mana", "Strong Mana", "Mana Vampire"];
+var equipmentParts = ["Belt", "Necklace", "Cloak", "Bracelet"];
 
-shardAttr = ["Arachno Resistance", "Blazing Resistance", "Breeze", "Dominance","Ender Resistance","Experience","Fortitude","Life Regeneration",
+var shardAttr = ["Arachno Resistance", "Blazing Resistance", "Breeze", "Dominance","Ender Resistance","Experience","Fortitude","Life Regeneration",
 "Lifeline","Magic Find","Mana Pool","Mana Regeneration","Speed","Undead Resistance","Veteran", "Vitality",
 "Arachno", "Attack Speed", "Blazing", "Combo", "Elite", "Ender", "Ignition", "Life Recovery", "Mana Steal", "Midas Touch", "Undead", "Warrior",
 "Deadeye", "Blazing Fortune","Fishing Experience", "Infection", "Double Hook", "Fisherman", "Fishing Speed", "Hunter", "Trophy Hunter"];
@@ -487,7 +496,7 @@ function ArmorManagement(item) {
             }
         });
     });
-    return parseInt(armorPrice);
+    return armorPrice;
 }
 
 function EquipmentManagement(item) {
@@ -520,7 +529,7 @@ function EquipmentManagement(item) {
                                 attrManify(attributes[1][0], attributes[1][1]) + " : " + priceManify(equipmentPrice) + "\n";
         }
     });
-    return parseInt(equipmentPrice);
+    return equipmentPrice;
 }
 
 function BookManagement(item) {
@@ -539,7 +548,7 @@ function BookManagement(item) {
             }
         });
     }
-    return parseInt(bookPrice);
+    return bookPrice;
 }
 
 function ShardManagement(item) {
@@ -554,91 +563,98 @@ function ShardManagement(item) {
                 let splits = nameLore.split(' ');
                 let level = romanToInt(splits[splits.length-1]);
                 shardPrice = getShardPrice(shard, level);
-                totalProfit += parseInt(shardPrice);
                 kuudraChestMoney += "shard " + attrManify(shard, level) + " : " + priceManify(shardPrice) + "\n";
             }
         });
     }
-    return parseInt(shardPrice);
+    return shardPrice;
 }
 
+EndedKuudraRegister = 
 register("tick", () => {
-    if (settings.chestCalc) {
-        try {
-            // after a kuudra run ended
-            if (EndedKuudra == 1) {
-                openedChest = Player.getContainer();
-                // when you open a large chest
-                if (openedChest.getName() == "Paid Chest" || openedChest.getName() == "Large Chest") {
-                    items = openedChest.getItems();
-                    // cycle throuth the slots
+    try {
+        // after a kuudra run ended
+        if (settings.chestCalc) {
+            openedChest = Player.getContainer();
+            // when you open a large chest
+            if (openedChest.getName() == "Paid Chest" || openedChest.getName() == "Large Chest") {
+                items = openedChest.getItems();
+                // cycle throuth the slots
 
-                    totalProfit = 0;
+                totalProfit = 0;
 
-                    for (i = 0; i < 54; i++) {
-                        // if there's an item
-                        if (items[i] != null) {
-                            // Armor Management part
-                            totalProfit += ArmorManagement(items[i]);
-                            
-                            // Equipment Management part
-                            totalProfit += EquipmentManagement(items[i]);
+                for (i = 0; i < 54; i++) {
+                    // if there's an item
+                    if (items[i] != null) {
+                        // Armor Management part
+                        totalProfit += parseFloat(ArmorManagement(items[i]));
+                        
+                        // Equipment Management part
+                        totalProfit += parseFloat(EquipmentManagement(items[i]));
 
-                            // Book Management part
-                            totalProfit += BookManagement(items[i]);
+                        // Book Management part
+                        totalProfit += parseFloat(BookManagement(items[i]));
 
-                            // Shard Management part
-                            totalProfit += ShardManagement(items[i]);
+                        // Shard Management part
+                        totalProfit += parseFloat(ShardManagement(items[i]));
 
-                            // Other Items Management part
-                            if (items[i].getName().includes("Enrager")) {
-                                kuudraChestMoney += "ENRAGER : 3b\n";
-                                totalProfit += 3000000000;
-                                ChatLib.chat("what da french seal !!! enrager !!!");
-                            }
+                        // Other Items Management part
+                        if (items[i].getName().includes("Enrager")) {
+                            kuudraChestMoney += "ENRAGER : 3b\n";
+                            totalProfit += 3000000000;
+                            ChatLib.chat("&4what da french seal !!! enrager !!!");
+                        }
 
-                            if (items[i].getName().includes("Wheel of Fate")) {
-                                kuudraChestMoney += "WoF : 12m\n";
-                                totalProfit += 12000000;
-                                ChatLib.chat("Woof ! Woof !!!");
-                            }
+                        if (items[i].getName().includes("Wheel of Fate")) {
+                            kuudraChestMoney += "WoF : 12m\n";
+                            totalProfit += 12000000;
+                            ChatLib.chat("&4Woof ! Woof !!!");
+                        }
 
-                            if (items[i].getName().includes("Tentacle Dye")) {
-                                kuudraChestMoney += "Dye : 13b\n";
-                                totalProfit += 13000000000;
-                                ChatLib.chat("DYE !!!");
-                            }
+                        if (items[i].getName().includes("Tentacle Dye")) {
+                            kuudraChestMoney += "Dye : 13b\n";
+                            totalProfit += 13000000000;
+                            ChatLib.chat("&4DYE !!!");
+                        }
 
-                            if (items[i].getName().includes("Hollow Wand")) {
-                                kuudraChestMoney += "Hollow Wand : 500k\n";
-                                totalProfit += 500000;
-                            }
+                        if (items[i].getName().includes("Hollow Wand")) {
+                            kuudraChestMoney += "Hollow Wand : 500k\n";
+                            totalProfit += 500000;
+                        }
 
-                            if (items[i].getName().includes("Aurora Staff")) {
-                                kuudraChestMoney += "Aurora Staff : 1m\n";
-                                totalProfit += 1000000;
-                            }
+                        if (items[i].getName().includes("Aurora Staff")) {
+                            kuudraChestMoney += "Aurora Staff : 1m\n";
+                            totalProfit += 1000000;
                         }
                     }
-
-                    kuudraChestMoney += "\n" + "total : " + priceManify(totalProfit);
-                    
-                    setTimeout(function() {
-                        kuudraChestMoney = "";
-                    }, "10000");
-
-                    EndedKuudra = 0;
                 }
+
+                kuudraChestMoney += "\n" + "total : " + priceManify(totalProfit);
+                
+                // stop registering for chests until next kuudra end to prevent lag
+                EndedKuudraRegister.unregister();
+
+                setTimeout(function() {
+                    kuudraChestMoney = "";
+                }, "10000");
             }
-        } catch (ex) {
-            ChatLib.chat(ex);
         }
+    } catch (ex) {
+        ChatLib.chat(ex);
     }
 });
 
+EndedKuudraRegister.unregister();
+
+// kuudra end run detection
+register("chat", () => {
+    // register for chest opening
+    EndedKuudraRegister.register();
+}).setChatCriteria("                        Percentage Complete: 100%");
+
 // debug purpose
 register("command", () => {
-    EndedKuudra = true;
+    EndedKuudraRegister.register();
 }).setName("endKuudra");
 
 
@@ -685,11 +701,6 @@ register("chat", (p, mana, names, event) => {
     }
 }).setChatCriteria("Party > ${p}: [DKA] Drained ${mana} mana on [${names}]");
 
-// kuudra end run detection
-register("chat", () => {
-    EndedKuudra = true;
-}).setChatCriteria("                        Percentage Complete: 100%");
-
 register("chat", () => {
     ChatLib.say("/pc [DKA] Fresh");
 }).setChatCriteria("Your Fresh Tools Perk bonus doubles your building speed for the next 10 seconds!");
@@ -732,10 +743,12 @@ register("command", (username) => {
 }).setName("getStuff");
 
 
-register("chat", (username, event) => {
+register("chat", (username, cbtLvl, event) => {
+    ChatLib.chat(`Looking for player ${username} in API!`);
     getStuff(username);
-}).setCriteria("Party > ${username} joined.");
+}).setCriteria("Party Finder > ${username} joined the group! (Combat Level ${cbtLvl})");
 
+//Party Finder > jojo_yolo69 joined the group! (Combat Level 60)
 
 
 function getStuff(username) {
