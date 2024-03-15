@@ -484,12 +484,18 @@ function ArmorManagement(item) {
                         armorAttr.forEach(attr => {
                             if (lorePart.includes(attr) && !lorePart.includes("Grants")) {
                                 let splits = lorePart.split(' ');
-                                let level = romanToInt(splits[splits.length-1]);
+                                let level = regex.test(splits[splits.length-1].replace(' ', '')) ? romanToInt(splits[splits.length-1]) : parseInt(splits[splits.length-1].replace(' ', ''));
                                 attributes.push([attr, level]);
                             }
                         });
                     }
                 });
+
+                // In the case the user has NEU "color coding" on t5 enchants and Experience is not found because it is rainbow
+                if (attributes.length < 2) {
+                    attributes.push(["Experience", 5]);
+                }
+                
                 armorPrice = getArmorPrice(armorType, armorPart, attributes[0][0], attributes[0][1], attributes[1][0], attributes[1][1]);
                 kuudraChestMoney += armorType + " " + armorPart + " " + attrManify(attributes[0][0], attributes[0][1]) + " " + 
                                     attrManify(attributes[1][0], attributes[1][1]) + " : " + priceManify(armorPrice) + "\n";
@@ -518,12 +524,18 @@ function EquipmentManagement(item) {
                     armorAttr.forEach(attr => {
                         if (lorePart.includes(attr) && !lorePart.includes("Grants")) {
                             let splits = lorePart.split(' ');
-                            let level = romanToInt(splits[splits.length-1]);
+                            let level = regex.test(splits[splits.length-1].replace(' ', '')) ? romanToInt(splits[splits.length-1]) : parseInt(splits[splits.length-1].replace(' ', ''));
                             attributes.push([attr, level]);
                         }
                     });
                 }
             });
+
+            // In the case the user has NEU "color coding" on t5 enchants and Experience is not found because it is rainbow
+            if (attributes.length < 2) {
+                attributes.push(["Experience", 5]);
+            }
+
             equipmentPrice = getEquipmentPrice(equipmentPart, attributes[0][0], attributes[0][1], attributes[1][0], attributes[1][1]);
             kuudraChestMoney += equipmentPart + " " + attrManify(attributes[0][0], attributes[0][1]) + " " +
                                 attrManify(attributes[1][0], attributes[1][1]) + " : " + priceManify(equipmentPrice) + "\n";
@@ -542,7 +554,7 @@ function BookManagement(item) {
             if (nameLore.includes(enchant)) {
                 // magic to get level and name then display
                 let splits = nameLore.split(' ');
-                let level = romanToInt(splits[splits.length-1]);
+                let level = regex.test(splits[splits.length-1].replace(' ', '')) ? romanToInt(splits[splits.length-1]) : parseInt(splits[splits.length-1].replace(' ', ''));
                 bookPrice = getEnchantPrice(enchant, level);
                 kuudraChestMoney += enchant + level + " : " + priceManify(bookPrice) + "\n";
             }
@@ -561,7 +573,7 @@ function ShardManagement(item) {
             if (nameLore.includes(shard)) {
                 // magic to get level and name then display
                 let splits = nameLore.split(' ');
-                let level = romanToInt(splits[splits.length-1]);
+                let level = regex.test(splits[splits.length-1].replace(' ', '')) ? romanToInt(splits[splits.length-1]) : parseInt(splits[splits.length-1].replace(' ', ''));
                 shardPrice = getShardPrice(shard, level);
                 kuudraChestMoney += "shard " + attrManify(shard, level) + " : " + priceManify(shardPrice) + "\n";
             }
