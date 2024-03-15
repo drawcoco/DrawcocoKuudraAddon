@@ -15,7 +15,7 @@ import {
 
 @Vigilant("scStats", "scStats", {
     getCategoryComparator: () => (a, b) => {
-        const categories = ["Informations", "Graphs", "Worm", "Party ping", "Others"];
+        const categories = ["Informations", "Kuudra"];
         return categories.indexOf(a.name) - categories.indexOf(b.name);
     }
 })
@@ -28,31 +28,42 @@ class Settings
     }
 
 
+    //##############################################################################
+    //                Informations
+    //##############################################################################
+
+
+    @ButtonProperty({
+        name: "Discord",
+        description: "You can join the Discord to see updates, give feature ideas, and report bugs! ",
+        category: "Informations",
+        placeholder: "Join Us !"
+    })
+    MyDiscord() {
+        java.awt.Desktop.getDesktop().browse(new java.net.URI("https://discord.gg/8YcmJA7aeM"));
+    }
+
      
     //##############################################################################
-    //                Worm
+    //                Kuudra
     //##############################################################################
 
 
     @SwitchProperty({
-        name: "Worm fishing Counter",
-        description: "count the number of worms near you, and send a party message when it cap",
-        category: "Worm",
-        subcategory: "Worm"
+        name: "Chest Calculator",
+        description: "Calculate an approximate value of the chest (does not substract the key price! )",
+        category: "Kuudra",
+        subcategory: "Kuudra"
     })
-    wormCounter = false;
-
+    chestCalc = true;
 
     @SwitchProperty({
-        name: "Worm fishing Party Notifier",
-        description: "Notify the party when the cap for worms is reached",
-        category: "Worm",
-        subcategory: "Worm"
+        name: "Mana Drain display",
+        description: "Shows the total mana drained by your mates during a fight. (Only works if your mates use DKA)",
+        category: "Kuudra",
+        subcategory: "Kuudra"
     })
-    wormPartyNotifier = false;
-
-
-
+    manaDrainDisplay = true;
 
 }
 export default new Settings
