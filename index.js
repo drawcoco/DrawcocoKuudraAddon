@@ -125,6 +125,14 @@ function emptyRectangle(x, y, dx, dy) {
 
 
 
+
+function checkIsAlphabet(str) {
+    if (str.charCodeAt(0) == 73 || str.charCodeAt(0) == 86) {
+        return true;
+    }
+    return false;
+}
+
 function getArmorPrice(Type, Part, attr1, lvl1, attr2, lvl2) {
     let isHelm = Part == "Helmet";
     if (Type == "Aurora") {
@@ -484,7 +492,7 @@ function ArmorManagement(item) {
                         armorAttr.forEach(attr => {
                             if (lorePart.includes(attr) && !lorePart.includes("Grants")) {
                                 let splits = lorePart.split(' ');
-                                let level = regex.test(splits[splits.length-1].replace(' ', '')) ? romanToInt(splits[splits.length-1]) : parseInt(splits[splits.length-1].replace(' ', ''));
+                                let level = checkIsAlphabet(splits[splits.length-1].replace(' ', '')) ? romanToInt(splits[splits.length-1]) : parseInt(splits[splits.length-1].replace(' ', ''));
                                 attributes.push([attr, level]);
                             }
                         });
@@ -524,7 +532,7 @@ function EquipmentManagement(item) {
                     armorAttr.forEach(attr => {
                         if (lorePart.includes(attr) && !lorePart.includes("Grants")) {
                             let splits = lorePart.split(' ');
-                            let level = regex.test(splits[splits.length-1].replace(' ', '')) ? romanToInt(splits[splits.length-1]) : parseInt(splits[splits.length-1].replace(' ', ''));
+                            let level = checkIsAlphabet(splits[splits.length-1].replace(' ', '')) ? romanToInt(splits[splits.length-1]) : parseInt(splits[splits.length-1].replace(' ', ''));
                             attributes.push([attr, level]);
                         }
                     });
@@ -554,7 +562,7 @@ function BookManagement(item) {
             if (nameLore.includes(enchant)) {
                 // magic to get level and name then display
                 let splits = nameLore.split(' ');
-                let level = regex.test(splits[splits.length-1].replace(' ', '')) ? romanToInt(splits[splits.length-1]) : parseInt(splits[splits.length-1].replace(' ', ''));
+                let level = checkIsAlphabet(splits[splits.length-1].replace(' ', '')) ? romanToInt(splits[splits.length-1]) : parseInt(splits[splits.length-1].replace(' ', ''));
                 bookPrice = getEnchantPrice(enchant, level);
                 kuudraChestMoney += enchant + level + " : " + priceManify(bookPrice) + "\n";
             }
@@ -573,7 +581,7 @@ function ShardManagement(item) {
             if (nameLore.includes(shard)) {
                 // magic to get level and name then display
                 let splits = nameLore.split(' ');
-                let level = regex.test(splits[splits.length-1].replace(' ', '')) ? romanToInt(splits[splits.length-1]) : parseInt(splits[splits.length-1].replace(' ', ''));
+                let level = checkIsAlphabet(splits[splits.length-1].replace(' ', '')) ? romanToInt(splits[splits.length-1]) : parseInt(splits[splits.length-1].replace(' ', ''));
                 shardPrice = getShardPrice(shard, level);
                 kuudraChestMoney += "shard " + attrManify(shard, level) + " : " + priceManify(shardPrice) + "\n";
             }
